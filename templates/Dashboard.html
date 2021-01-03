@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Table - LexBox Admin Panel</title>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css?h=a87701f27fd287fcaf9a8e559cbf3e3e">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
+    <link rel="stylesheet" href="static/fonts/fontawesome-all.min.css?h=98a49735ed420ff1094cb21c75dd8271">
+    <script>
+        function handle(e) {
+                keyword = document.getElementById("keyword").value;
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+                    searching();
+                }
+                return false;
+            }
+
+        function searching() {
+            window.location = "/search?keyword=" + document.getElementById("keyword").value +"&" + "token=" +window.localStorage.getItem('lexbox') + "&"+"criteria="+ document.getElementById("criteria").value;
+        };
+
+        function setToken() {
+            window.localStorage.setItem("lexbox", $TOKEN$ )
+        }
+
+        function logout() {
+            window.location = "/logout?token=" + window.localStorage.getItem('lexbox')
+        }
+
+
+    </script>
+</head>
+
+<body id="page-top" onload="setToken();">
+    <div id="wrapper">
+        <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+            <div class="container-fluid d-flex flex-column p-0">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-landmark"></i></div>
+                    <div class="sidebar-brand-text mx-3"><span>LexBox</span></div>
+                </a>
+                <hr class="sidebar-divider my-0">
+                <ul class="nav navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item" role="presentation"><a class="nav-link active"><i class="fas fa-table"></i><span>Tabel Plângeri</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" onClick="logout()"><i class="far fa-user-circle"></i><span>Logout</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+                
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-3" id="sidebarToggleTop"  type="button"><i class="fas fa-bars"></i></button>
+                        <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                            <div class="input-group"><input class="bg-light form-control border-0 small" id="keyword" onkeypress="handle(event)" type="text" placeholder="Search for ...">
+                                <select class="form-control search-slt" id="criteria">
+                                    <option value="CONCAT(CONCAT(nume, ' '), prenume)">
+                                            <p>Nume/Prenume</p>
+                                    </option>
+                                    <option  value="adresaProceduralaJudet">
+                                            <p>Judet</p>
+                                    </option>
+                                    <option value="adresaProceduralaOras">
+                                            <p>Oras/Localitate</p>
+                                    </option>
+                                    <option value="cnp">
+                                            <p>CNP</p>
+                                    </option>
+                                </select>
+                                <div class="input-group-append">                                 
+                                    <button class="btn btn-primary py-0" type="button" id="searchbtn" onclick="searching()"><i class="fas fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <h3 class="text-dark mb-4">Plângeri contravenționale</h3>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                <table class="table dataTable my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nume</th>
+                                            <th>Prenume</th>
+                                            <th>Judet</th>
+                                            <th>Oras/Localitate</th>
+                                            <th>CNP</th>
+                                            <th>Descarcare date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        {% for record in records %}
+                                        <tr>
+                                            <td> {{ record.nume }} </td>
+                                            <td> {{ record.prenume }} </td>
+                                            <td> {{ record.judet }} </td>
+                                            <td> {{ record.oras }} </td>
+                                            <td> {{ record.cnp }} </td>
+                                            <td><a href="{{ record.download }}" class="fa fa-download"><button class="btn">Download Files</button></a></td>
+                                       </tr>
+                                        {% endfor %}
+
+                                        <tr></tr>
+                                        <tr></tr>
+                                        <tr></tr>
+                                        <tr></tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a></div>
+    <script src="static/js/jquery.min.js?h=83e266cb1712b47c265f77a8f9e18451"></script>
+    <script src="static/bootstrap/js/bootstrap.min.js?h=63715b63ee49d5fe4844c2ecae071373"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
+    <script src="static/js/theme.js?h=6d33b44a6dcb451ae1ea7efc7b5c5e30"></script>
+    
+</body>
+
+</html>
